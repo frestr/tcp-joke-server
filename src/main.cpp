@@ -4,7 +4,7 @@
 int get_port(int argc, char *argv[])
 {
     if (argc == 1) {
-        std::cout << "No port specified. Defaulting to 4242.\n";
+        std::cerr << "No port specified. Defaulting to 4242.\n";
         return 4242;
     }
     if (argc != 2) {
@@ -16,11 +16,13 @@ int get_port(int argc, char *argv[])
     int i;
     if (in >> i && in.eof()) {
         if (i < 1024 || i > 65535) {
-            std::cout << "Port number must in range [1024, 65535]\n";
+            std::cerr << "Port number must in range [1024, 65535]\n";
             return -1;
         }
         return i;
     }
+    std::cerr << "Invalid port number\n";
+    return -1;
 }
 
 int main(int argc, char *argv[])
