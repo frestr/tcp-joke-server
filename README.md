@@ -14,7 +14,7 @@ to compile.
 In one terminal, start the server:
 ```
 $ ./server 4242
-Listening on localhost:4242 ...
+Listening on [::]:4242 ...
 ```
 
 And in another, connect to the server:

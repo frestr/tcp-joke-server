@@ -32,6 +32,7 @@ private:
 
     int sockfd;
     int port;
+    std::string listener_addr_repr;
 
     std::vector<std::string> jokes;
 

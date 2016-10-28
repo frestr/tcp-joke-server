@@ -34,7 +34,7 @@ void Listener::start_listening()
         throw 1;
     }
 
-    std::cout << "Listening on localhost:" << port << " ...\n";
+    std::cout << "Listening on [" << listener_addr_repr << "]:" << port << " ...\n";
     while (true) {
         // Socket for incoming connection
         int new_fd;
@@ -83,7 +83,7 @@ addrinfo* Listener::get_addr_info(const char* port)
 
     hints.ai_family = AF_UNSPEC;        // both ipv4 and ipv6
     hints.ai_socktype = SOCK_STREAM;    // tcp
-    hints.ai_flags = AI_PASSIVE;        // use localhost
+    hints.ai_flags = AI_PASSIVE;        // addr will be used for listening
 
     int status;
     if ((status = getaddrinfo(NULL, port, &hints, &addr)) != 0) {
@@ -119,6 +119,11 @@ int Listener::get_socket(addrinfo *addr)
         if (setsockopt(sockfd, IPPROTO_IPV6, IPV6_V6ONLY, &no, sizeof(no)) == -1) {
             std::cerr << "Error turning off IPV6_V6ONLY for socket\n";
         }
+
+        // Save representation of assigned address for later
+        char addr_repr[INET6_ADDRSTRLEN];
+        inet_ntop(p->ai_family, util::get_in_addr(p->ai_addr), addr_repr, sizeof(addr_repr));
+        listener_addr_repr = std::string(addr_repr);
 
         // Bind socket
         if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
